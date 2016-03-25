@@ -1,10 +1,9 @@
-package binarytree;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import jade.core.AID;
 import jade.core.Agent;
 import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -17,7 +16,7 @@ public class TreeAgent extends Agent{
 	int currentCid = 0;
 	
 	protected void setup() {
-		System.out.println("====>New binarytree.TreeAgent '"+getLocalName()+"' initiated (...Je suis un arbre mais pas en bois)");
+		System.out.println("====>New TreeAgent '"+getLocalName()+"' initiated (...Je suis un arbre mais pas en bois)");
 		
 		addBehaviour(new LaunchBehaviour());
 	}
@@ -53,11 +52,11 @@ public class TreeAgent extends Agent{
 						break;
 					case "insert":
 						if (root == null){
-						//	root = new binarytree.NodeAgent();
+						//	root = new NodeAgent();
 							AgentContainer cc = this.getAgent().getContainerController();
 							try {
 								String rootname= getLocalName() + valueMsg.toString();
-								cc.createNewAgent(rootname, "binarytree.NodeAgent", null);
+								cc.createNewAgent(rootname, "NodeAgent", null);
 								root = rootname;
 							} catch (StaleProxyException e) {
 								// TODO Auto-generated catch block
@@ -74,14 +73,14 @@ public class TreeAgent extends Agent{
 							this.getAgent().addBehaviour(new InTreeBehaviour(valueMsg, ++currentCid));
 						break;
 					default:
-						answer(message, ACLMessage.FAILURE,"RequÃªte mal formÃ©e : '" + msg + "'");
+						answer(message, ACLMessage.FAILURE,"Requête mal formée : '" + msg + "'");
 						break;
 				}
 			}
 		}
 
 		private void answer(ACLMessage message, int perf, String msg) {
-			System.out.println("requÃªte "+message.getContent()+":");
+			System.out.println("requête "+message.getContent()+":");
 			System.out.println("\t"+msg);
 			
 			ACLMessage fail = message.createReply();

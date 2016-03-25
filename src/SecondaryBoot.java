@@ -1,5 +1,3 @@
-package binarytree;
-
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -17,7 +15,7 @@ public class SecondaryBoot {
 		try{
 			p = new ProfileImpl(SECONDARY_PROPERTIES_FILE);
 			ContainerController cc = rt.createAgentContainer(p);
-			AgentController tree = cc.createNewAgent("Tree", "binarytree.TreeAgent", null);
+			AgentController tree = cc.createNewAgent("Tree", "TreeAgent", null);
 			
 			tree.start();
 			

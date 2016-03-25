@@ -1,5 +1,3 @@
-package binarytree;
-
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParseException;
