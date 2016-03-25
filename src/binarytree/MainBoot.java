@@ -1,3 +1,4 @@
+package binarytree;
 
 import jade.core.Runtime;
 import jade.core.Profile;

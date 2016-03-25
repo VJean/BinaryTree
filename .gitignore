@@ -1,4 +1,12 @@
-.settings/
+# Java
+## build output
 bin/
+
+# IDE
+## eclipse
+.settings/
 .classpath
 .project
+## IntelliJ
+.idea/
+*.iml

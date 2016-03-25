@@ -1,17 +1,13 @@
+package binarytree;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import TreeAgent.InTreeBehaviour;
-import TreeAgent.InsertBehaviour;
-import TreeAgent.LaunchBehaviour;
-import TreeAgent.PrintBehaviour;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.wrapper.AgentContainer;
-import jade.wrapper.StaleProxyException;
 
 
 public class NodeAgent extends Agent{
@@ -20,7 +16,7 @@ public class NodeAgent extends Agent{
 	String rightSon;
 	
 	protected void setup() {
-		System.out.println("====>New NodeAgent '"+getLocalName()+"' initiated");
+		System.out.println("====>New binarytree.NodeAgent '"+getLocalName()+"' initiated");
 		
 		addBehaviour(new LaunchBehaviour());
 	}
@@ -52,7 +48,7 @@ public class NodeAgent extends Agent{
 //							AgentContainer cc = this.getAgent().getContainerController();
 //							try {
 //								String rootname= getLocalName() + valueMsg.toString();
-//								cc.createNewAgent(rootname, "NodeAgent", null);
+//								cc.createNewAgent(rootname, "binarytree.NodeAgent", null);
 //								root = rootname;
 //							} catch (StaleProxyException e) {
 //								// TODO Auto-generated catch block
@@ -60,30 +56,30 @@ public class NodeAgent extends Agent{
 //							}
 						
 						if(valueMsg == value){
-							answer(message, ACLMessage.INFORM, value.toString() + " déjà inséré");
-						//TODO envoyer une requête d'insertion sur le fils gauche ou droit selon la valeur
+							answer(message, ACLMessage.INFORM, value.toString() + " dï¿½jï¿½ insï¿½rï¿½");
+						//TODO envoyer une requï¿½te d'insertion sur le fils gauche ou droit selon la valeur
 						}else if(valueMsg <= value){
 							
 						}
 						else{
 							
 						}
-						this.getAgent().addBehaviour(new InsertBehaviour(valueMsg, ++currentCid));
+						this.getAgent().addBehaviour(new TreeAgent.InsertBehaviour(valueMsg, ++currentCid));
 						break;
 					case "inTree":
 						if (root == null)
 							answer(message, ACLMessage.INFORM, "cet arbre n'a pas encore de racine");
 						else
-							this.getAgent().addBehaviour(new InTreeBehaviour(valueMsg, ++currentCid));
+							this.getAgent().addBehaviour(new TreeAgent.InTreeBehaviour(valueMsg, ++currentCid));
 						break;
 					default:
-						answer(message, ACLMessage.FAILURE,"Requête mal formée : '" + msg + "'");
+						answer(message, ACLMessage.FAILURE,"Requï¿½te mal formï¿½e : '" + msg + "'");
 						break;
 				}
 			}
 		}
 		private void answer(ACLMessage message, int perf, String msg) {
-			System.out.println("requête "+message.getContent()+":");
+			System.out.println("requï¿½te "+message.getContent()+":");
 			System.out.println("\t"+msg);
 			
 			ACLMessage fail = message.createReply();
