@@ -74,7 +74,7 @@ public class TreeAgent extends Agent{
 							this.getAgent().addBehaviour(new InTreeBehaviour(valueMsg, ++currentCid));
 						break;
 					default:
-						answer(message, ACLMessage.FAILURE,"Requ�te mal form�e : '" + msg + "'");
+						answer(message, ACLMessage.FAILURE,"Requête mal formée : '" + msg + "'");
 						break;
 				}
 			}
@@ -92,13 +92,12 @@ public class TreeAgent extends Agent{
 
 		@Override
 		public boolean done() {
-			
 			return false;
 		}
 		
 	}
 
-	public class InTreeBehaviour extends OneShotBehaviour {
+	private class InTreeBehaviour extends OneShotBehaviour {
 		Integer convId;
 		
 		public InTreeBehaviour(int valueMsg, int convId) {
@@ -114,7 +113,6 @@ public class TreeAgent extends Agent{
 				req.setContent(TreeMsgContent.serialize(reqcontent));
 				send(req);
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -122,41 +120,42 @@ public class TreeAgent extends Agent{
 		@Override
 		public void action() {
 			// TODO Auto-generated method stub
-
+            // wait for answer to request (check conversationId)
+            // if no response yet, block() to wait (oneshot)
 		}
 
 	}
 
-	public class InsertBehaviour extends OneShotBehaviour {
+	private class InsertBehaviour extends OneShotBehaviour {
 		int convId;
 		
 		public InsertBehaviour(int valueMsg, int convId) {
 			super();
 			
 			this.convId = convId;
-			
+
 			TreeMsgContent reqcontent = new TreeMsgContent("insert", valueMsg);
 			ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
 			req.addReceiver(new AID(root,AID.ISLOCALNAME));
-			
+
 			try {
 				req.setContent(TreeMsgContent.serialize(reqcontent));
 				send(req);
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
-
+            // TODO Auto-generated method stub
+            // wait for answer to request (check conversationId)
+            // if no response yet, block() to wait (oneshot)
 		}
 
 	}
 
-	public class PrintBehaviour extends OneShotBehaviour {
+	private class PrintBehaviour extends OneShotBehaviour {
 		int convId;
 		
 		public PrintBehaviour(int convId) {
@@ -171,15 +170,15 @@ public class TreeAgent extends Agent{
 				req.setContent(TreeMsgContent.serialize(reqcontent));
 				send(req);
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		@Override
 		public void action() {
-			// TODO Auto-generated method stub
-
+            // TODO Auto-generated method stub
+            // wait for answer to request (check conversationId)
+            // if no response yet, block() to wait (oneshot)
 		}
 	}
 }

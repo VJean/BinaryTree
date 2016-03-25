@@ -1,1 +1,1 @@
-http://SMESTAENS11D.ad.utc:7778/acc
+http://Jean:7778/acc

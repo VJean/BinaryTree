@@ -9,6 +9,8 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.io.IOException;
+
 
 public class NodeAgent extends Agent{
 	Integer value;
@@ -35,47 +37,27 @@ public class NodeAgent extends Agent{
 				String typeMsg;
 				Integer valueMsg=0;
 				String convId = message.getConversationId();
-				
-				TreeMsgContent treeMsg = TreeMsgContent.deserialize(msg);
-				typeMsg = treeMsg.getType();
-				valueMsg = treeMsg.getValue();
-				
-				switch(typeMsg){
-					case "print":
-						this.getAgent().addBehaviour(new PrintBehaviour(convId));
-						break;
-					case "insert":
-//							AgentContainer cc = this.getAgent().getContainerController();
-//							try {
-//								String rootname= getLocalName() + valueMsg.toString();
-//								cc.createNewAgent(rootname, "binarytree.NodeAgent", null);
-//								root = rootname;
-//							} catch (StaleProxyException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-						
-						if(valueMsg == value){
-							answer(message, ACLMessage.INFORM, value.toString() + " d�j� ins�r�");
-						//TODO envoyer une requ�te d'insertion sur le fils gauche ou droit selon la valeur
-						}else if(valueMsg <= value){
-							
-						}
-						else{
-							
-						}
-						this.getAgent().addBehaviour(new TreeAgent.InsertBehaviour(valueMsg, ++currentCid));
-						break;
-					case "inTree":
-						if (root == null)
-							answer(message, ACLMessage.INFORM, "cet arbre n'a pas encore de racine");
-						else
-							this.getAgent().addBehaviour(new TreeAgent.InTreeBehaviour(valueMsg, ++currentCid));
-						break;
-					default:
-						answer(message, ACLMessage.FAILURE,"Requ�te mal form�e : '" + msg + "'");
-						break;
-				}
+
+                TreeMsgContent treeMsg = null;
+                try {
+                    treeMsg = TreeMsgContent.deserialize(msg);
+                    typeMsg = treeMsg.getType();
+                    valueMsg = treeMsg.getValue();
+
+                    switch(typeMsg){
+                        case "print":
+                            break;
+                        case "insert":
+                            break;
+                        case "inTree":
+                            break;
+                        default:
+                            answer(message, ACLMessage.FAILURE,"Requête mal formée : '" + msg + "'");
+                            break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 			}
 		}
 		private void answer(ACLMessage message, int perf, String msg) {
@@ -92,27 +74,6 @@ public class NodeAgent extends Agent{
 		public boolean done() {
 			
 			return false;
-		}
-	}
-	
-	public class PrintBehaviour extends OneShotBehaviour {
-		String convId;
-		
-		public PrintBehaviour(String convId) {
-			super();
-			
-			this.convId = convId;
-			
-			TreeMsgContent reqcontent = new TreeMsgContent("print");
-			ACLMessage req = new ACLMessage(ACLMessage.REQUEST);
-			req.addReceiver(new AID(root,AID.ISLOCALNAME));
-			try {
-				req.setContent(TreeMsgContent.serialize(reqcontent));
-				send(req);
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 }
