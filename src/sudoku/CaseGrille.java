@@ -1,5 +1,11 @@
 package sudoku;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,5 +29,15 @@ public class CaseGrille {
 	
 	public CaseGrille(int valeur){
 		this.valeur = valeur;
+	}
+
+	public static String serialize(CaseGrille[] cg) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(cg);
+	}
+
+	public static CaseGrille[] deserialize(String m) throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(m, CaseGrille[].class);
 	}
 }

@@ -1,10 +1,14 @@
 package sudoku;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class EnvironmentAgent extends Agent {
 
@@ -17,6 +21,7 @@ public class EnvironmentAgent extends Agent {
                             {1,0,8,0,3,2,4,9,0},
                             {0,0,0,1,0,6,0,5,0},
                             {3,0,0,7,0,0,0,0,2}};
+
     private CaseGrille[][] grid = new CaseGrille[9][9];
 
     protected void setup() {
@@ -43,7 +48,7 @@ public class EnvironmentAgent extends Agent {
         }
 
         // add behaviours
-
+		this.addBehaviour(new DeliverCasesBehaviour());
     }
 
     private CaseGrille[] getCases(int index){
@@ -62,19 +67,47 @@ public class EnvironmentAgent extends Agent {
             index %= 9;
             CaseGrille result[] = new CaseGrille[9];
             int baseLine = Math.floorDiv(index, 3) * 3; // no time to explain just accept it
-            int baseColumn = index % 3; // same
-
+            int baseColumn = index % 3 * 3; // same
+			int resIndex = 0;
             for (int i = baseLine; i < baseLine + 3; i++) {
                 for (int j = baseColumn; j < baseColumn + 3; j++) {
-                    result[i+j] = grid[i][j];
+                    result[resIndex++] = grid[i][j];
                 }
             }
             return result;
-
         }
-
         return null;
     }
 
+	private class DeliverCasesBehaviour extends Behaviour {
 
+		@Override
+		public void action() {
+			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+			ACLMessage msg = receive(msgTemplate);
+
+			if (msg != null) {
+				Integer index = Integer.parseInt(msg.getContent());
+				if (index < 27 && index >= 0) {
+					ACLMessage forward = msg.createReply();
+					// set conversationId with the requested row/column/square index.
+					forward.setConversationId(index.toString());
+
+					CaseGrille[] caseSet = getCases(index);
+
+					try {
+						forward.setContent(CaseGrille.serialize(caseSet));
+						send(forward);
+					} catch (JsonProcessingException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		@Override
+		public boolean done() {
+			return false;
+		}
+	}
 }

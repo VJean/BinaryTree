@@ -39,7 +39,7 @@ public class SimulationAgent extends Agent {
         this.addBehaviour(new RegistrationBehaviour());
         // add cyclic behaviour
         // 100ms: arbitrary period
-        this.addBehaviour(new SimulationBehaviour(this, 100));
+        this.addBehaviour(new SimulationBehaviour(this, 2000));
     }
 
     private class RegistrationBehaviour extends Behaviour {
@@ -89,7 +89,7 @@ public class SimulationAgent extends Agent {
                 if (result.length > 0) {
                     AID envAgent = result[0].getName();
 
-                    for (int i = 0; i < 27; i++) {
+                    for (int i = 0; i < 2; i++) {
                         AID agent = analyseAgents.get(i);
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                         msg.addReplyTo(agent);
