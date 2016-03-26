@@ -20,8 +20,6 @@ public class SecondaryBoot {
 			AgentController tree = cc.createNewAgent("Tree", "binarytree.TreeAgent", null);
 			
 			tree.start();
-			
-			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}

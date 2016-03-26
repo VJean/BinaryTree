@@ -1,4 +1,4 @@
-package sudoku;
+package common;
 
 import jade.core.Runtime;
 import jade.core.Profile;

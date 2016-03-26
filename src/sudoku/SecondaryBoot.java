@@ -27,7 +27,6 @@ public class SecondaryBoot {
 				AgentController analAgent = cc.createNewAgent("Analyser"+i, "sudoku.AnalyseAgent", null);
 				analAgent.start();
 			}
-			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
