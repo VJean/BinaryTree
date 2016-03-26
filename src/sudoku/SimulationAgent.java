@@ -62,7 +62,6 @@ public class SimulationAgent extends Agent {
 
         @Override
         public boolean done() {
-            // TODO Auto-generated method stub
             return analyseAgents.size() == 27;
         }
     }
@@ -77,7 +76,7 @@ public class SimulationAgent extends Agent {
         @Override
         protected void onTick() {
             // check that all 27 agents are registered
-            if (analyseAgents.size() != 27 && !isStopped)
+            if (analyseAgents.size() != 27 || isStopped)
                 return;
 
             for (int i = 0; i < 27; i++) {
@@ -95,14 +94,13 @@ public class SimulationAgent extends Agent {
 
                     DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
                     if (result.length > 0) {
-
                         msg.addReceiver(result[0].getName());
                         msg.setContent(String.valueOf(i));
                         send(msg);
                     }
 
                 } catch (FIPAException e) {
-                    System.out.print(getLocalName() + "could not register to simulation :\n\t" + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
