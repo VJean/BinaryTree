@@ -20,7 +20,7 @@ public class SimulationAgent extends Agent {
     private Boolean isStopped = false;
 
     protected void setup() {
-        System.out.println("'" + getLocalName() + "' initiated.\t(" + this.getClass() + ")" );
+        System.out.println("'" + getLocalName() + "' initiated.\t(" + this.getClass() + ")");
 
         // register to Directory Facilitator (DF)
         DFAgentDescription dfd = new DFAgentDescription();
@@ -52,8 +52,7 @@ public class SimulationAgent extends Agent {
             MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
             ACLMessage message = receive(modele);
             if (message != null) {
-                if (message.getContent().equalsIgnoreCase("register"))
-                {
+                if (message.getContent().equalsIgnoreCase("register")) {
                     analyseAgents.add(message.getSender());
                     System.out.println(getLocalName() + " registered " + message.getSender().getLocalName());
                 }
@@ -75,33 +74,33 @@ public class SimulationAgent extends Agent {
 
         @Override
         protected void onTick() {
-            // check that all 27 agents are registered
+            // check that all 27 agents are registered and simulation is running
             if (analyseAgents.size() != 27 || isStopped)
                 return;
 
-            for (int i = 0; i < 27; i++) {
-                AID agent = analyseAgents.get(i);
-                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                msg.addReplyTo(agent);
+            // search for the Environment Agent
+            DFAgentDescription dfd = new DFAgentDescription();
+            ServiceDescription sd = new ServiceDescription();
+            sd.setType("environment");
+            dfd.addServices(sd);
 
-                // search for the Simulation Agent
-                DFAgentDescription dfd = new DFAgentDescription();
-                ServiceDescription sd = new ServiceDescription();
-                sd.setType("environment");
-                dfd.addServices(sd);
+            try {
+                DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
+                if (result.length > 0) {
+                    AID envAgent = result[0].getName();
 
-                try {
-
-                    DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
-                    if (result.length > 0) {
-                        msg.addReceiver(result[0].getName());
+                    for (int i = 0; i < 27; i++) {
+                        AID agent = analyseAgents.get(i);
+                        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                        msg.addReplyTo(agent);
+                        msg.addReceiver(envAgent);
                         msg.setContent(String.valueOf(i));
                         send(msg);
                     }
-
-                } catch (FIPAException e) {
-                    e.printStackTrace();
                 }
+
+            } catch (FIPAException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -113,8 +112,7 @@ public class SimulationAgent extends Agent {
             MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
             ACLMessage message = receive(modele);
             if (message != null) {
-                if (message.getContent().equalsIgnoreCase("stop"))
-                {
+                if (message.getContent().equalsIgnoreCase("stop")) {
                     isStopped = true;
                 }
             }
