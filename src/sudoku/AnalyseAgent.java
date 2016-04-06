@@ -1,5 +1,6 @@
 package sudoku;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -9,6 +10,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import sun.util.resources.cldr.gl.CalendarData_gl_ES;
+
+import java.io.IOException;
 
 
 public class AnalyseAgent extends Agent {
@@ -72,7 +77,32 @@ public class AnalyseAgent extends Agent {
     private class AnalyseBehaviour extends Behaviour {
         @Override
         public void action() {
+            MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+            ACLMessage msg = receive(msgTemplate);
 
+            if (msg != null) {
+                CaseGrille[] cases;
+                ACLMessage msgReply = msg.createReply();
+
+                // deserialize message
+                try {
+                    cases = CaseGrille.deserialize(msg.getContent());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+
+                handleCases(cases);
+
+                // answer to the request
+                try {
+                    msgReply.setPerformative(ACLMessage.INFORM);
+                    msgReply.setContent(CaseGrille.serialize(cases));
+                    send(msgReply);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
@@ -81,7 +111,7 @@ public class AnalyseAgent extends Agent {
         }
     }
 
-    private CaseGrille[] HandleCases(CaseGrille[] set){
+    private CaseGrille[] handleCases(CaseGrille[] set){
         return set;
     }
 }
