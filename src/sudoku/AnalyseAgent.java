@@ -1,6 +1,7 @@
 package sudoku;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,7 +14,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.util.leap.HashMap;
 import jade.lang.acl.MessageTemplate;
 import java.io.IOException;
 
@@ -115,7 +115,7 @@ public class AnalyseAgent extends Agent {
     }
 
     private void handleCases(CaseGrille[] set){
-    	Map<Integer, ArrayList<Integer>> possibleToIndex = (Map<Integer, ArrayList<Integer>>) new HashMap();
+    	HashMap<Integer, ArrayList> possibleToIndex = new HashMap<>();
     	for(int i=0;i<set.length;i++){
     		if(set[i].getValeur() == 0){
     			uniqPossibleValue(set[i]);
@@ -143,8 +143,8 @@ public class AnalyseAgent extends Agent {
      * Si une valeur n'est possible que pour une case, alors celle-ci prend cette valeur
      * @param possibleToIndex : valeurs possibles mappées à l'ensemble des index correspondants
      */
-    private void uniqIndexToPossibleValue(CaseGrille[] set, Map<Integer, ArrayList<Integer>> possibleToIndex) {
-    	for (Entry<Integer, ArrayList<Integer>> entry : possibleToIndex.entrySet()) {
+    private void uniqIndexToPossibleValue(CaseGrille[] set, HashMap<Integer, ArrayList> possibleToIndex) {
+    	for (Entry<Integer, ArrayList> entry : possibleToIndex.entrySet()) {
 			Integer value = entry.getKey();
 			ArrayList<Integer> indexes = entry.getValue();
 			
