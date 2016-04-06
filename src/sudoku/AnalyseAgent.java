@@ -43,8 +43,7 @@ public class AnalyseAgent extends Agent {
 
         @Override
         public void action() {
-            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.setContent("register");
+            ACLMessage msg = new ACLMessage(ACLMessage.SUBSCRIBE);
 
             // search for the Simulation Agent
 			DFAgentDescription dfd = new DFAgentDescription();
