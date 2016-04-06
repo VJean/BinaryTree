@@ -49,13 +49,11 @@ public class SimulationAgent extends Agent {
             // wait for requests
             // get AID in msg content
             // store AID in analyseAgents
-            MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+            MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.SUBSCRIBE);
             ACLMessage message = receive(modele);
             if (message != null) {
-                if (message.getContent().equalsIgnoreCase("register")) {
-                    analyseAgents.add(message.getSender());
-                    System.out.println(getLocalName() + " registered " + message.getSender().getLocalName());
-                }
+                analyseAgents.add(message.getSender());
+                System.out.println(getLocalName() + " registered " + message.getSender().getLocalName());
             }
         }
 
