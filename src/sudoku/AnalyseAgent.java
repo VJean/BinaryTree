@@ -35,6 +35,8 @@ public class AnalyseAgent extends Agent {
 
         // add register Behaviour
         addBehaviour(new RegisterBehaviour());
+        // add analyse Behaviour
+        addBehaviour(new AnalyseBehaviour());
     }
 
     private class RegisterBehaviour extends OneShotBehaviour {
