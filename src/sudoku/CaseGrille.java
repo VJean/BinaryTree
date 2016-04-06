@@ -31,6 +31,8 @@ public class CaseGrille {
 		this.valeur = valeur;
 	}
 
+	public CaseGrille(){}
+
 	public static String serialize(CaseGrille[] cg) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(cg);
