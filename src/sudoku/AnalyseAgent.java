@@ -3,7 +3,7 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -14,6 +14,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.HashMap;
+import jade.lang.acl.MessageTemplate;
+import java.io.IOException;
 
 
 public class AnalyseAgent extends Agent {
@@ -35,14 +37,15 @@ public class AnalyseAgent extends Agent {
 
         // add register Behaviour
         addBehaviour(new RegisterBehaviour());
+        // add analyse Behaviour
+        addBehaviour(new AnalyseBehaviour());
     }
 
     private class RegisterBehaviour extends OneShotBehaviour {
 
         @Override
         public void action() {
-            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-            msg.setContent("register");
+            ACLMessage msg = new ACLMessage(ACLMessage.SUBSCRIBE);
 
             // search for the Simulation Agent
 			DFAgentDescription dfd = new DFAgentDescription();
@@ -77,7 +80,32 @@ public class AnalyseAgent extends Agent {
     private class AnalyseBehaviour extends Behaviour {
         @Override
         public void action() {
+            MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+            ACLMessage msg = receive(msgTemplate);
 
+            if (msg != null) {
+                CaseGrille[] cases;
+                ACLMessage msgReply = msg.createReply();
+
+                // deserialize message
+                try {
+                    cases = CaseGrille.deserialize(msg.getContent());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return;
+                }
+
+                handleCases(cases);
+
+                // answer to the request
+                try {
+                    msgReply.setPerformative(ACLMessage.INFORM);
+                    msgReply.setContent(CaseGrille.serialize(cases));
+                    send(msgReply);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override

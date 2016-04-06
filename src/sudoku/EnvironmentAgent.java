@@ -10,6 +10,8 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.io.IOException;
+
 public class EnvironmentAgent extends Agent {
 
     private int[][] initialGrid = {{5,0,0,0,0,4,0,0,8},
@@ -49,6 +51,7 @@ public class EnvironmentAgent extends Agent {
 
         // add behaviours
 		this.addBehaviour(new DeliverCasesBehaviour());
+		this.addBehaviour(new ReceiveCasesBehaviour());
     }
 
     private CaseGrille[] getCases(int index){
@@ -110,4 +113,48 @@ public class EnvironmentAgent extends Agent {
 			return false;
 		}
 	}
+
+	private class ReceiveCasesBehaviour extends Behaviour {
+		@Override
+		public void action() {
+			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+			ACLMessage msg = receive(msgTemplate);
+
+			if (msg != null) {
+				CaseGrille[] received = new CaseGrille[9];
+				int convId = Integer.parseInt(msg.getConversationId());
+
+				try {
+					received = CaseGrille.deserialize(msg.getContent());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				if (received != null) {
+					CaseGrille[] base = getCases(convId);
+					// update the cases
+					update(base, received);
+				}
+			}
+
+		}
+
+		private void update(CaseGrille[] oldSet, CaseGrille[] newSet) {
+			for (int i = 0; i < 9; i++){
+				CaseGrille oldCase = oldSet[i];
+				CaseGrille newCase = newSet[i];
+
+				// affect new value
+				oldCase.setValeur(newCase.getValeur());
+				// perform intersection
+				oldCase.getPossibles().retainAll(newCase.getPossibles());
+			}
+		}
+
+		@Override
+		public boolean done() {
+			return false;
+		}
+	}
+
 }
