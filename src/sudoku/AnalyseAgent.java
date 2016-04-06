@@ -2,6 +2,7 @@ package sudoku;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -58,5 +59,29 @@ public class AnalyseAgent extends Agent {
 				System.out.print(getLocalName() + "could not register to simulation :\n\t" + e.getMessage());
 			}
         }
+    }
+
+    /**
+     * Comportement principal d'un AnalyseAgent :
+     * <ol>
+     *     <li>Réception des requêtes de l'environnement</li>
+     *     <li>Traitement de la liste des case reçues</li>
+     *     <li>Envoi des cases traitées par retour de message</li>
+     * </ol>
+     */
+    private class AnalyseBehaviour extends Behaviour {
+        @Override
+        public void action() {
+
+        }
+
+        @Override
+        public boolean done() {
+            return false;
+        }
+    }
+
+    private CaseGrille[] HandleCases(CaseGrille[] set){
+        return set;
     }
 }
