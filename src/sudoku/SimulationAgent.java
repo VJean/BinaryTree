@@ -36,8 +36,7 @@ public class SimulationAgent extends Agent {
         }
 
         this.addBehaviour(new RegistrationBehaviour());
-        // 100ms: arbitrary period
-        this.addBehaviour(new SimulationBehaviour(this, 2000));
+        this.addBehaviour(new SimulationBehaviour(this, 100));
         this.addBehaviour(new StopSimulationBehaviour());
     }
 

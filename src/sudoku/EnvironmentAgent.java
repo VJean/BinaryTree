@@ -10,7 +10,10 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class EnvironmentAgent extends Agent {
@@ -43,12 +46,15 @@ public class EnvironmentAgent extends Agent {
 			e.printStackTrace();
 		}
 
-		// init grid
-        for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++){
-                grid[i][j]=new CaseGrille(initialGrid[i][j]);
-            }
-        }
+
+//		// init grid
+//        for(int i=0;i<9;i++){
+//            for(int j=0;j<9;j++){
+//                grid[i][j]=new CaseGrille(initialGrid[i][j]);
+//            }
+//        }
+		grid = loadFromFile();
+
 
         // add behaviours
 		//this.addBehaviour(new DeliverCasesBehaviour());
@@ -58,7 +64,27 @@ public class EnvironmentAgent extends Agent {
 		//this.addBehaviour(new PrintSudokuBehaviour());
     }
 
-    private CaseGrille[] getCases(int index){
+	private CaseGrille[][] loadFromFile() {
+		CaseGrille[][] result = new CaseGrille[9][9];
+
+		File file = new File("res/sudoku_grid");
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(file);
+
+			for(int i=0;i<9;i++){
+				for(int j=0;j<9;j++){
+					result[i][j]=new CaseGrille(scanner.nextInt());
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private CaseGrille[] getCases(int index){
         if(index>=0 && index<=8){
             return grid[index];
 
@@ -205,14 +231,9 @@ public class EnvironmentAgent extends Agent {
 			ACLMessage msg = receive(msgTemplate);
 
 			if (msg != null && msg.getContent().equalsIgnoreCase("print")) {
-				for(int i=0;i<9;i++){
-		            for(int j=0;j<9;j++){
-		                System.out.print(grid[i][j].getValeur());
-		            }
-		            System.out.println();
-		        }
+				print();
 			}
-			
+
 		}
 
 		@Override
@@ -259,12 +280,7 @@ public class EnvironmentAgent extends Agent {
 					send(reply);
 
 				} else if (content.equalsIgnoreCase("print")) {
-					for(int i=0;i<9;i++){
-						for(int j=0;j<9;j++){
-							System.out.print(grid[i][j].getValeur());
-						}
-						System.out.println();
-					}
+					print();
 				}
 			}
 		}
@@ -273,6 +289,17 @@ public class EnvironmentAgent extends Agent {
 		public boolean done() {
 			return false;
 		}
+	}
+
+
+	private void print() {
+		for(int i=0;i<9;i++){
+			for(int j=0;j<9;j++){
+				System.out.print(grid[i][j].getValeur() + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 
 	private boolean isFinished() {

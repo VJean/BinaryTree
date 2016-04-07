@@ -124,11 +124,12 @@ public class AnalyseAgent extends Agent {
     				int valuePossible = set[i].getPossibles().get(j);
     				// Si la valeur du possible existe déjà dans la map, on ajoute l'index correspondant
     				if(possibleToIndex.containsKey(valuePossible)){
-    					possibleToIndex.get(valuePossible).add(i);
+    					possibleToIndex.get(valuePossible).add((Integer) i);
     				}
     				// Sinon, on ajoute une entrée dans la map avec le premier index à ajouter
     				else{
-    					possibleToIndex.put(valuePossible, new ArrayList<Integer>(i));
+    					possibleToIndex.put(valuePossible, new ArrayList<Integer>());
+    					possibleToIndex.get(valuePossible).add((Integer) i);
     				}
     			}
     		}
@@ -136,7 +137,7 @@ public class AnalyseAgent extends Agent {
     			removePossibleValue(set, i);
     		}
     	}
-    	uniqIndexToPossibleValue(set, possibleToIndex);
+    	//uniqIndexToPossibleValue(set, possibleToIndex);
     }
 
     /**
