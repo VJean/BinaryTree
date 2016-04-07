@@ -115,9 +115,15 @@ public class SimulationAgent extends Agent {
         public void action() {
             MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
             ACLMessage message = receive(modele);
-            if (message != null && message.getContent().equalsIgnoreCase("finished")) {
+            if (message != null) {
+                if (message.getContent().equalsIgnoreCase("finished")) {
                     isStopped = true;
-                    System.out.println("###################### Sudoku done." );
+                    System.out.println("###################### Sudoku done.");
+
+                } else {
+                    System.out.println("###################### Sudoku still running.");
+
+                }
             }
         }
 
