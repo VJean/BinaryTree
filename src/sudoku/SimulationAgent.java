@@ -35,11 +35,10 @@ public class SimulationAgent extends Agent {
             e.printStackTrace();
         }
 
-        // add registration behaviour
         this.addBehaviour(new RegistrationBehaviour());
-        // add cyclic behaviour
         // 100ms: arbitrary period
         this.addBehaviour(new SimulationBehaviour(this, 2000));
+        this.addBehaviour(new StopSimulationBehaviour());
     }
 
     private class RegistrationBehaviour extends Behaviour {
@@ -87,6 +86,12 @@ public class SimulationAgent extends Agent {
                 if (result.length > 0) {
                     AID envAgent = result[0].getName();
 
+                    // get the environment status
+                    ACLMessage isFinishedMsg = new ACLMessage(ACLMessage.REQUEST);
+                    isFinishedMsg.setContent("status");
+                    send(isFinishedMsg);
+
+                    // send the index
                     for (int i = 0; i < 27; i++) {
                         AID agent = analyseAgents.get(i);
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -109,16 +114,14 @@ public class SimulationAgent extends Agent {
         public void action() {
             MessageTemplate modele = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
             ACLMessage message = receive(modele);
-            if (message != null) {
-                if (message.getContent().equalsIgnoreCase("stop")) {
+            if (message != null && message.getContent().equalsIgnoreCase("finished")) {
                     isStopped = true;
-                }
+                    System.out.println("###################### Sudoku done." );
             }
         }
 
         @Override
         public boolean done() {
-            // TODO Auto-generated method stub
             return false;
         }
     }

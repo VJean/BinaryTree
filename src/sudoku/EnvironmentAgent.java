@@ -52,6 +52,7 @@ public class EnvironmentAgent extends Agent {
         // add behaviours
 		this.addBehaviour(new DeliverCasesBehaviour());
 		this.addBehaviour(new ReceiveCasesBehaviour());
+		this.addBehaviour(new IsFinishedBehaviour());
     }
 
     private CaseGrille[] getCases(int index){
@@ -84,26 +85,33 @@ public class EnvironmentAgent extends Agent {
 
 	private class DeliverCasesBehaviour extends Behaviour {
 
+		/**
+		 * Receive an integer and deliver the corresponding cases
+		 */
 		@Override
 		public void action() {
 			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
 			ACLMessage msg = receive(msgTemplate);
 
 			if (msg != null) {
-				Integer index = Integer.parseInt(msg.getContent());
-				if (index < 27 && index >= 0) {
-					ACLMessage forward = msg.createReply();
-					// set conversationId with the requested row/column/square index.
-					forward.setConversationId(index.toString());
+				try {
+					Integer index = Integer.parseInt(msg.getContent());
+					if (index < 27 && index >= 0) {
+                        ACLMessage forward = msg.createReply();
+                        // set conversationId with the requested row/column/square index.
+                        forward.setConversationId(index.toString());
 
-					CaseGrille[] caseSet = getCases(index);
+                        CaseGrille[] caseSet = getCases(index);
 
-					try {
-						forward.setContent(CaseGrille.serialize(caseSet));
-						send(forward);
-					} catch (JsonProcessingException e) {
-						e.printStackTrace();
-					}
+                        try {
+                            forward.setContent(CaseGrille.serialize(caseSet));
+                            send(forward);
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -144,10 +152,15 @@ public class EnvironmentAgent extends Agent {
 				CaseGrille oldCase = oldSet[i];
 				CaseGrille newCase = newSet[i];
 
-				// affect new value
-				oldCase.setValeur(newCase.getValeur());
-				// perform intersection
-				oldCase.getPossibles().retainAll(newCase.getPossibles());
+
+				if (oldCase.getValeur() == 0) {
+
+					// affect new value
+					if (newCase.getValeur() != oldCase.getValeur())
+                        oldCase.setValeur(newCase.getValeur());
+					// perform intersection
+					oldCase.getPossibles().retainAll(newCase.getPossibles());
+				}
 			}
 		}
 
@@ -157,4 +170,41 @@ public class EnvironmentAgent extends Agent {
 		}
 	}
 
+	private class IsFinishedBehaviour extends Behaviour {
+		@Override
+		public void action() {
+			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+			ACLMessage msg = receive(msgTemplate);
+
+			if (msg != null && msg.getContent().equalsIgnoreCase("status")) {
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(ACLMessage.INFORM);
+				if (isFinished())
+					reply.setContent("finished");
+				else
+					reply.setContent("running");
+
+				send(reply);
+			}
+
+		}
+
+		@Override
+		public boolean done() {
+			return false;
+		}
+	}
+
+	private boolean isFinished() {
+		boolean result = true;
+
+		for(int i=0;i<9;i++){
+			for(int j=0;j<9;j++){
+				if (grid[i][j].getValeur() == 0)
+					result = false;
+			}
+		}
+
+		return result;
+	}
 }

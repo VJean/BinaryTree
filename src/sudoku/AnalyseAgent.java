@@ -174,8 +174,7 @@ public class AnalyseAgent extends Agent {
      */
 	private void uniqPossibleValue(CaseGrille caseG) {
 		if(caseG.getPossibles().size() == 1){
-			caseG.setValeur(caseG.getPossibles().get(0));	
-			caseG.getPossibles().remove(0);
+			caseG.setValeur(caseG.getPossibles().get(0));
 		}
 	}
 }

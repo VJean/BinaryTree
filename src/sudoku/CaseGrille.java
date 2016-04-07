@@ -19,6 +19,8 @@ public class CaseGrille {
 	}
 	public void setValeur(int valeur) {
 		this.valeur = valeur;
+		if (valeur != 0)
+			possibles.clear();
 	}
 	public ArrayList<Integer> getPossibles() {
 		return possibles;
@@ -28,7 +30,7 @@ public class CaseGrille {
 	}
 	
 	public CaseGrille(int valeur){
-		this.valeur = valeur;
+		this.setValeur(valeur);
 	}
 
 	public CaseGrille(){}
@@ -41,5 +43,16 @@ public class CaseGrille {
 	public static CaseGrille[] deserialize(String m) throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(m, CaseGrille[].class);
+	}
+
+	@Override
+	public String toString() {
+		String res = "val:"+valeur+ " ; possibles:";
+		for (int p :
+				possibles) {
+			res += " " + p;
+		}
+
+		return res;
 	}
 }
