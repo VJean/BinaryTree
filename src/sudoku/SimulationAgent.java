@@ -88,6 +88,7 @@ public class SimulationAgent extends Agent {
 
                     // get the environment status
                     ACLMessage isFinishedMsg = new ACLMessage(ACLMessage.REQUEST);
+                    isFinishedMsg.addReceiver(envAgent);
                     isFinishedMsg.setContent("status");
                     send(isFinishedMsg);
 

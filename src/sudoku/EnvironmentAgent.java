@@ -53,6 +53,7 @@ public class EnvironmentAgent extends Agent {
 		this.addBehaviour(new DeliverCasesBehaviour());
 		this.addBehaviour(new ReceiveCasesBehaviour());
 		this.addBehaviour(new IsFinishedBehaviour());
+		this.addBehaviour(new printSudokuBehaviour());
     }
 
     private CaseGrille[] getCases(int index){
@@ -193,6 +194,31 @@ public class EnvironmentAgent extends Agent {
 		public boolean done() {
 			return false;
 		}
+	}
+	
+	private class printSudokuBehaviour extends Behaviour {
+		@Override
+		public void action() {
+			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+			ACLMessage msg = receive(msgTemplate);
+
+			if (msg != null && msg.getContent().equalsIgnoreCase("print")) {
+				for(int i=0;i<9;i++){
+		            for(int j=0;j<9;j++){
+		                System.out.print(grid[i][j]); 
+		            }
+		            System.out.println();
+		        }
+			}
+			
+		}
+
+		@Override
+		public boolean done() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
 	}
 
 	private boolean isFinished() {
