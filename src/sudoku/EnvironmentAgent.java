@@ -11,6 +11,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class EnvironmentAgent extends Agent {
 
@@ -50,9 +51,10 @@ public class EnvironmentAgent extends Agent {
         }
 
         // add behaviours
-		this.addBehaviour(new DeliverCasesBehaviour());
-		this.addBehaviour(new ReceiveCasesBehaviour());
-		this.addBehaviour(new IsFinishedBehaviour());
+		//this.addBehaviour(new DeliverCasesBehaviour());
+		//this.addBehaviour(new ReceiveCasesBehaviour());
+		//this.addBehaviour(new IsFinishedBehaviour());
+		this.addBehaviour(new ReceiveRequestsBehaviour());
     }
 
     private CaseGrille[] getCases(int index){
@@ -187,6 +189,53 @@ public class EnvironmentAgent extends Agent {
 				send(reply);
 			}
 
+		}
+
+		@Override
+		public boolean done() {
+			return false;
+		}
+	}
+
+	private class ReceiveRequestsBehaviour extends Behaviour {
+
+		@Override
+		public void action() {
+			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+			ACLMessage msg = receive(msgTemplate);
+
+			if (msg != null) {
+				String content = msg.getContent();
+				if (Pattern.matches("\\d+", content)) {
+					Integer index = Integer.parseInt(msg.getContent());
+					if (index < 27 && index >= 0) {
+						ACLMessage forward = msg.createReply();
+						// set conversationId with the requested row/column/square index.
+						forward.setConversationId(index.toString());
+
+						CaseGrille[] caseSet = getCases(index);
+
+						try {
+							forward.setContent(CaseGrille.serialize(caseSet));
+							send(forward);
+						} catch (JsonProcessingException e) {
+							e.printStackTrace();
+						}
+					}
+				} else if (content.equalsIgnoreCase("status")) {
+					ACLMessage reply = msg.createReply();
+					reply.setPerformative(ACLMessage.INFORM);
+					if (isFinished())
+						reply.setContent("finished");
+					else
+						reply.setContent("running");
+
+					send(reply);
+
+				} else if (content.equalsIgnoreCase("print")) {
+
+				}
+			}
 		}
 
 		@Override
