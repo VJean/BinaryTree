@@ -1,0 +1,32 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+td5:jean rdf:type foaf:Person .
+td5:jean-michel rdf:type foaf:Person .
+td5:jean-charles rdf:type foaf:Person .
+td5:marie rdf:type foaf:Person .
+td5:marie-jeanne rdf:type foaf:Person .
+td5:marie-louise rdf:type foaf:Person .
+td5:unBeauPaysage rdf:type foaf:Image .
+td5:11SeptembreLaVerite rdf:type foaf:Document .
+
+td5:jean foaf:name "Jean"^^xsd:string .
+td5:jean-michel foaf:name "Jean-Michel"^^xsd:string .
+td5:jean-charles foaf:name "Jean-Charles"^^xsd:string .
+td5:marie foaf:name "Marie"^^xsd:string .
+td5:marie-jeanne foaf:name "Marie-Jeanne"^^xsd:string .
+td5:marie-louise foaf:name "Marie-Louise"^^xsd:string .
+td5:unBeauPaysage foaf:name "Un beau paysage"^^xsd:string .
+td5:11SeptembreLaVerite foaf:name "11 Septembre, la verite"^^xsd:string .
+
+td5:jean foaf:knows td5:marie-louise .
+td5:jean-charles foaf:knows td5:marie-jeanne .
+td5:jean-charles foaf:knows td5:jean .
+td5:marie foaf:knows td5:marie-louise .
+td5:marie foaf:knows td5:jean-michel .
+
+td5:jean foaf:topic_interest td5:marie-louise .
+td5:marie foaf:topic_interest td5:unBeauPaysage .
+td5:jean-charles foaf:topic_interest td5:11SeptembreLaVerite .
