@@ -137,7 +137,7 @@ public class AnalyseAgent extends Agent {
     			removePossibleValue(set, i);
     		}
     	}
-    	//uniqIndexToPossibleValue(set, possibleToIndex);
+    	uniqIndexToPossibleValue(set, possibleToIndex);
     }
 
     /**
@@ -145,7 +145,7 @@ public class AnalyseAgent extends Agent {
      * @param possibleToIndex : valeurs possibles mappées à l'ensemble des index correspondants
      */
     private void uniqIndexToPossibleValue(CaseGrille[] set, HashMap<Integer, ArrayList> possibleToIndex) {
-    	for (Entry<Integer, ArrayList> entry : possibleToIndex.entrySet()) {
+        for (Entry<Integer, ArrayList> entry : possibleToIndex.entrySet()) {
 			Integer value = entry.getKey();
 			ArrayList<Integer> indexes = entry.getValue();
 			

@@ -18,16 +18,6 @@ import java.util.regex.Pattern;
 
 public class EnvironmentAgent extends Agent {
 
-    private int[][] initialGrid = {{5,0,0,0,0,4,0,0,8},
-                            {0,1,0,9,0,7,0,0,0},
-                            {0,9,2,8,5,0,7,0,6},
-                            {7,0,0,3,0,1,0,0,4},
-                            {0,0,0,0,0,0,0,0,0},
-                            {6,0,0,2,0,8,0,0,1},
-                            {1,0,8,0,3,2,4,9,0},
-                            {0,0,0,1,0,6,0,5,0},
-                            {3,0,0,7,0,0,0,0,2}};
-
     private CaseGrille[][] grid = new CaseGrille[9][9];
 
     protected void setup() {
@@ -46,15 +36,8 @@ public class EnvironmentAgent extends Agent {
 			e.printStackTrace();
 		}
 
-
-//		// init grid
-//        for(int i=0;i<9;i++){
-//            for(int j=0;j<9;j++){
-//                grid[i][j]=new CaseGrille(initialGrid[i][j]);
-//            }
-//        }
+		// init grid
 		grid = loadFromFile();
-
 
         // add behaviours
 		//this.addBehaviour(new DeliverCasesBehaviour());
