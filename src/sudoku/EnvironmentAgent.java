@@ -40,11 +40,8 @@ public class EnvironmentAgent extends Agent {
 		grid = loadFromFile();
 
         // add behaviours
-		//this.addBehaviour(new DeliverCasesBehaviour());
 		this.addBehaviour(new ReceiveCasesBehaviour());
-		//this.addBehaviour(new IsFinishedBehaviour());
 		this.addBehaviour(new ReceiveRequestsBehaviour());
-		//this.addBehaviour(new PrintSudokuBehaviour());
     }
 
 	private CaseGrille[][] loadFromFile() {
@@ -82,8 +79,8 @@ public class EnvironmentAgent extends Agent {
         } else if(index>=18 && index<=26){
             index %= 9;
             CaseGrille result[] = new CaseGrille[9];
-            int baseLine = Math.floorDiv(index, 3) * 3; // no time to explain just accept it
-            int baseColumn = index % 3 * 3; // same
+            int baseLine = Math.floorDiv(index, 3) * 3;
+            int baseColumn = index % 3 * 3;
 			int resIndex = 0;
             for (int i = baseLine; i < baseLine + 3; i++) {
                 for (int j = baseColumn; j < baseColumn + 3; j++) {
@@ -94,45 +91,6 @@ public class EnvironmentAgent extends Agent {
         }
         return null;
     }
-
-	private class DeliverCasesBehaviour extends Behaviour {
-
-		/**
-		 * Receive an integer and deliver the corresponding cases
-		 */
-		@Override
-		public void action() {
-			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-			ACLMessage msg = receive(msgTemplate);
-
-			if (msg != null) {
-				try {
-					Integer index = Integer.parseInt(msg.getContent());
-					if (index < 27 && index >= 0) {
-                        ACLMessage forward = msg.createReply();
-                        // set conversationId with the requested row/column/square index.
-                        forward.setConversationId(index.toString());
-
-                        CaseGrille[] caseSet = getCases(index);
-
-                        try {
-                            forward.setContent(CaseGrille.serialize(caseSet));
-                            send(forward);
-                        } catch (JsonProcessingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		@Override
-		public boolean done() {
-			return false;
-		}
-	}
 
 	private class ReceiveCasesBehaviour extends Behaviour {
 		@Override
@@ -174,31 +132,6 @@ public class EnvironmentAgent extends Agent {
 					oldCase.getPossibles().retainAll(newCase.getPossibles());
 				}
 			}
-		}
-
-		@Override
-		public boolean done() {
-			return false;
-		}
-	}
-
-	private class IsFinishedBehaviour extends Behaviour {
-		@Override
-		public void action() {
-			MessageTemplate msgTemplate = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-			ACLMessage msg = receive(msgTemplate);
-
-			if (msg != null && msg.getContent().equalsIgnoreCase("status")) {
-				ACLMessage reply = msg.createReply();
-				reply.setPerformative(ACLMessage.INFORM);
-				if (isFinished())
-					reply.setContent("finished");
-				else
-					reply.setContent("running");
-
-				send(reply);
-			}
-
 		}
 
 		@Override
