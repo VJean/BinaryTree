@@ -3,7 +3,13 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix geo: <http://linkedgeodata.org/triplify/> .
+# Îles sandwich du sud : node249399339
+# Allemagne : node1683325355
+# France : node1363947712
+# République d'Irlande : node1420871007
 
+td5:florian rdf:type foaf:Person .
 td5:jean rdf:type foaf:Person .
 td5:jean-michel rdf:type foaf:Person .
 td5:jean-charles rdf:type foaf:Person .
@@ -31,3 +37,8 @@ td5:marie foaf:knows td5:jean-michel .
 td5:jean foaf:topic_interest td5:marie-louise .
 td5:marie foaf:topic_interest td5:unBeauPaysage .
 td5:jean-charles foaf:topic_interest td5:11SeptembreLaVerite .
+
+td5:florian foaf:topic_interest geo:node249399339
+td5:marie-jeanne foaf:topic_interest geo:node1683325355
+td5:jean-charles foaf:topic_interest geo:node1363947712
+td5:marie-louise foaf:topic_interest geo:node1420871007

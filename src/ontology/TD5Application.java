@@ -26,7 +26,6 @@ public class TD5Application {
             RDFNode obj = st.getSubject();
             System.out.println(obj.toString());
         }
-
     }
 
     public static String readInput() {
