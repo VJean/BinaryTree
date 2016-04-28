@@ -21,7 +21,7 @@ import static jade.lang.acl.MessageTemplate.MatchPerformative;
 /**
  * Created by JeanV on 28/04/2016.
  */
-public class PropagateSparql extends Agent {
+public class PropagateSparqlAgent extends Agent {
     protected void setup() {
         System.out.println("'" + getLocalName() + "' initiated.\t(" + this.getClass() + ")" );
 

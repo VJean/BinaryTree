@@ -19,6 +19,10 @@ public class SecondaryBoot {
 			// create KB agent
 			AgentController kbAgent = cc.createNewAgent("KnowledgeBase", "KBAgent", null);
 			kbAgent.start();
+			// create PropagateSparqlAgent agent
+			AgentController propSparqlAgent = cc.createNewAgent("PropagateSparql", "PropagateSparqlAgent", null);
+			propSparqlAgent.start();
+
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
