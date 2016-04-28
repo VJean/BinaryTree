@@ -29,7 +29,7 @@ public class KBAgent extends Agent{
 	protected void setup() {
 		System.out.println("'" + getLocalName() + "' initiated.\t(" + this.getClass() + ")" );
 		
-	    Model model = ModelFactory.createDefaultModel();
+	    model = ModelFactory.createDefaultModel();
 		InputStream in = FileManager.get().open("file:res/td5.n3");
         model.read(in, null, "TURTLE");
 

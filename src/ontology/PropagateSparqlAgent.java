@@ -36,7 +36,8 @@ public class PropagateSparqlAgent extends Agent {
             MessageTemplate pattern = MatchPerformative(ACLMessage.REQUEST);
             ACLMessage req = getAgent().receive(pattern);
 
-            getAgent().addBehaviour(new PropagateBehaviour(requestsCount++, req.getContent()));
+            if (req != null)
+                getAgent().addBehaviour(new PropagateBehaviour(requestsCount++, req.getContent()));
 
         }
     }
@@ -56,21 +57,21 @@ public class PropagateSparqlAgent extends Agent {
             sd.setType("KnowledgeBase");
             dfd.addServices(sd);
 
-            try {
-                DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
-                if (result.length > 0) {
-                    AID kbAgent = result[0].getName();
+//            try {
+//                DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
+//                if (result.length > 0) {
+//                    AID kbAgent = result[0].getName();
 
                     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                     msg.setContent(content);
                     msg.setConversationId(convId);
-                    msg.addReceiver(kbAgent);
+                    msg.addReceiver(new AID("KnowledgeBase",AID.ISLOCALNAME));
 
-                    getAgent().send(msg);
-                }
-            } catch (FIPAException e) {
-                e.printStackTrace();
-            }
+                    send(msg);
+                //}
+//            } catch (FIPAException e) {
+//                e.printStackTrace();
+//            }
 
         }
 
@@ -85,10 +86,12 @@ public class PropagateSparqlAgent extends Agent {
                 block();
 
             // receive csv
-            ArrayList<String> split =  new ArrayList<String>(Arrays.asList(res.getContent().split("\\n")));
-            System.out.println(
-                    "===== convId : "+ convId + "\n"
-                    + split.size() + " résultats");
+//            ArrayList<String> split =  new ArrayList<String>(Arrays.asList(res.getContent().split("\\n")));
+//            System.out.println(
+//                    "===== convId : "+ convId + "\n"
+//                    + split.size() + " résultats");
+            System.out.println(res.getSender().getLocalName() + " answered with INFORM");
+            System.out.println(res.getContent());
 
         }
 
