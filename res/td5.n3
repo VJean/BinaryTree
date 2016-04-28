@@ -38,7 +38,7 @@ td5:jean foaf:topic_interest td5:marie-louise .
 td5:marie foaf:topic_interest td5:unBeauPaysage .
 td5:jean-charles foaf:topic_interest td5:11SeptembreLaVerite .
 
-td5:florian foaf:topic_interest geo:node249399339
-td5:marie-jeanne foaf:topic_interest geo:node1683325355
-td5:jean-charles foaf:topic_interest geo:node1363947712
-td5:marie-louise foaf:topic_interest geo:node1420871007
+td5:florian foaf:topic_interest geo:node249399339 .
+td5:marie-jeanne foaf:topic_interest geo:node1683325355 .
+td5:jean-charles foaf:topic_interest geo:node1363947712 .
+td5:marie-louise foaf:topic_interest geo:node1420871007 .

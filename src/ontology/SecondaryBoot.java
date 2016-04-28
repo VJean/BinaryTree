@@ -17,10 +17,10 @@ public class SecondaryBoot {
 			p = new ProfileImpl(SECONDARY_PROPERTIES_FILE);
 			ContainerController cc = rt.createAgentContainer(p);
 			// create KB agent
-			AgentController kbAgent = cc.createNewAgent("KnowledgeBase", "KBAgent", null);
+			AgentController kbAgent = cc.createNewAgent("KnowledgeBase", "ontology.KBAgent", null);
 			kbAgent.start();
 			// create PropagateSparqlAgent agent
-			AgentController propSparqlAgent = cc.createNewAgent("PropagateSparql", "PropagateSparqlAgent", null);
+			AgentController propSparqlAgent = cc.createNewAgent("PropagateSparql", "ontology.PropagateSparqlAgent", null);
 			propSparqlAgent.start();
 
 		} catch(Exception ex) {
