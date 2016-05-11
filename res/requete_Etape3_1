@@ -1,0 +1,7 @@
+PREFIX td5: <http://www.utc.fr/ia04/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+
+SELECT ?personnes_connues
+WHERE {
+    td5:jean-charles foaf:knows ?personnes_connues .
+}
