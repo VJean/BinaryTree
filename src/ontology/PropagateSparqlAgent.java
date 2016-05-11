@@ -2,6 +2,7 @@ package ontology;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
@@ -42,69 +43,64 @@ public class PropagateSparqlAgent extends Agent {
         }
     }
 
-    private class PropagateBehaviour extends OneShotBehaviour {
+    private class PropagateBehaviour extends Behaviour {
         private String convId;
+        private String request;
+        private boolean done = false;
 
         public PropagateBehaviour(int id, String content) {
             super();
 
             convId = String.valueOf(id);
+            request = content;
 
             // send Request to KBAgent
+            // Nota : searching for agent in DFAgent doesn't seem to work...
+            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+            msg.setContent(request);
+            msg.setConversationId(convId);
+            msg.addReceiver(new AID("KnowledgeBase",AID.ISLOCALNAME));
 
-            DFAgentDescription dfd = new DFAgentDescription();
-            ServiceDescription sd = new ServiceDescription();
-            sd.setType("KnowledgeBase");
-            dfd.addServices(sd);
-
-//            try {
-//                DFAgentDescription[] result = DFService.search(this.getAgent(), dfd);
-//                if (result.length > 0) {
-//                    AID kbAgent = result[0].getName();
-
-                    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                    msg.setContent(content);
-                    msg.setConversationId(convId);
-                    msg.addReceiver(new AID("KnowledgeBase",AID.ISLOCALNAME));
-
-                    send(msg);
-                //}
-//            } catch (FIPAException e) {
-//                e.printStackTrace();
-//            }
-
+            send(msg);
         }
 
         @Override
         public void action() {
-            MessageTemplate pattern = MessageTemplate.and(MatchPerformative(ACLMessage.INFORM),
-                                                    MatchConversationId(this.convId));
-            ACLMessage res = getAgent().receive(pattern);
+            MessageTemplate pattern = MessageTemplate.MatchConversationId(this.convId);
+            ACLMessage res = receive(pattern);
 
             // wait for message
-            if (res == null)
+            if (res != null)
+            {
+                switch(res.getPerformative()) {
+                    case ACLMessage.INFORM:
+                        handleInform(res);
+                        break;
+                    case ACLMessage.FAILURE:
+                        handleFailure(res);
+                        break;
+                }
+                done = true;
+            } else {
                 block();
+            }
+        }
 
-            // receive csv
-//            ArrayList<String> split =  new ArrayList<String>(Arrays.asList(res.getContent().split("\\n")));
-//            System.out.println(
-//                    "===== convId : "+ convId + "\n"
-//                    + split.size() + " résultats");
-            System.out.println(res.getSender().getLocalName() + " answered with INFORM");
-            System.out.println(res.getContent());
-
+        @Override
+        public boolean done() {
+            return done;
         }
 
         private void handleInform(ACLMessage msg){
-
+            System.out.println("------SparqlResult------\n"
+                            + "---Request\n" + this.request
+                            + "\n\n---Returned\n" + msg.getContent()
+                            + "------------------------");
         }
 
         private void handleFailure(ACLMessage msg){
-
+            System.out.println("Error !\n\t"+msg.getContent());
         }
-
-
-
     }
 
 }

@@ -1,18 +1,12 @@
 package ontology;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
-import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.util.FileManager;
-
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -21,6 +15,9 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 public class KBAgent extends Agent{
 	
@@ -87,13 +84,17 @@ public class KBAgent extends Agent{
 	}
 	public static String runSelectQuery(String query, Model model) {
 
-        QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ResultSet r = queryExecution.execSelect();
-        ResultSetFormatter.outputAsCSV(baos,r);
-        queryExecution.close();
-        
-        return baos.toString();
-    }
+		try {
+			QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ResultSet r = queryExecution.execSelect();
+			ResultSetFormatter.outputAsCSV(baos,r);
+			queryExecution.close();
+
+			return baos.toString();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 }
