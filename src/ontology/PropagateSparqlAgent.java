@@ -82,18 +82,18 @@ public class PropagateSparqlAgent extends Agent {
             ACLMessage res = getAgent().receive(pattern);
 
             // wait for message
-            if (res == null)
-                block();
-
-            // receive csv
-//            ArrayList<String> split =  new ArrayList<String>(Arrays.asList(res.getContent().split("\\n")));
-//            System.out.println(
-//                    "===== convId : "+ convId + "\n"
-//                    + split.size() + " résultats");
-            System.out.println(res.getSender().getLocalName() + " answered with INFORM");
-            System.out.println(res.getContent());
-
-        }
+            if (res != null){
+            	System.out.println(res.getSender().getLocalName() + " answered with INFORM");
+            	System.out.println(res.getContent());
+            	 // receive csv
+//              ArrayList<String> split =  new ArrayList<String>(Arrays.asList(res.getContent().split("\\n")));
+//              System.out.println(
+//                      "===== convId : "+ convId + "\n"
+//                      + split.size() + " résultats");
+            }
+            else
+            	block();
+            }
 
         private void handleInform(ACLMessage msg){
 
