@@ -2,6 +2,7 @@ package ontology;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
@@ -42,8 +43,9 @@ public class PropagateSparqlAgent extends Agent {
         }
     }
 
-    private class PropagateBehaviour extends OneShotBehaviour {
+    private class PropagateBehaviour extends Behaviour {
         private String convId;
+        private boolean done = false;
 
         public PropagateBehaviour(int id, String content) {
             super();
@@ -90,6 +92,7 @@ public class PropagateSparqlAgent extends Agent {
 //              System.out.println(
 //                      "===== convId : "+ convId + "\n"
 //                      + split.size() + " résultats");
+            	done = true;
             }
             else
             	block();
@@ -102,6 +105,11 @@ public class PropagateSparqlAgent extends Agent {
         private void handleFailure(ACLMessage msg){
 
         }
+
+		@Override
+		public boolean done() {
+			return done;
+		}
 
 
 
