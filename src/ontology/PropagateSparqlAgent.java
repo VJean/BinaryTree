@@ -48,7 +48,7 @@ public class PropagateSparqlAgent extends Agent {
         private String request;
         private boolean done = false;
 
-        public PropagateBehaviour(int id, String content) {
+        PropagateBehaviour(int id, String content) {
             super();
 
             convId = String.valueOf(id);

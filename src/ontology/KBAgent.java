@@ -46,7 +46,8 @@ public class KBAgent extends Agent{
         // add request Behaviour
         addBehaviour(new RequestBehaviour());
     }
-	public Model getModel(){
+
+	private Model getModel(){
 		return model;
 	}
 	
@@ -82,7 +83,8 @@ public class KBAgent extends Agent{
 		}
 		
 	}
-	public static String runSelectQuery(String query, Model model) {
+
+	private static String runSelectQuery(String query, Model model) {
 
 		try {
 			QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
