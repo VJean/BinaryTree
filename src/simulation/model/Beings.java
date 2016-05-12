@@ -1,6 +1,7 @@
 package simulation.model;
 
 import sim.engine.SimState;
+import sim.engine.Stoppable;
 import sim.field.grid.ObjectGrid2D;
 import sim.field.grid.SparseGrid2D;
 import sim.util.Int2D;
@@ -27,7 +28,8 @@ public class Beings extends SimState {
 			yard.setObjectLocation(insect, location);
 			insect.x = location.x;
 			insect.y = location.y;
-			schedule.scheduleRepeating(insect);
+			Stoppable stoppable = schedule.scheduleRepeating(insect);
+			insect.stoppable = stoppable;
 		}
 	}
 	private void addAgentsFood() {
@@ -38,7 +40,8 @@ public class Beings extends SimState {
 			yard.setObjectLocation(f, location);
 			f.x = location.x;
 			f.y = location.y;
-			schedule.scheduleRepeating(f);
+			Stoppable stoppable = schedule.scheduleRepeating(f);
+			f.stoppable = stoppable;
 		}
 	}
 

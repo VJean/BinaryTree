@@ -17,6 +17,7 @@ import sim.engine.SimState;
 import sim.portrayal.Inspector;
 import sim.portrayal.grid.ObjectGridPortrayal2D;
 import sim.portrayal.grid.SparseGridPortrayal2D;
+import sim.portrayal.simple.LabelledPortrayal2D;
 import sim.portrayal.simple.OvalPortrayal2D;
 import simulation.model.Beings;
 import simulation.model.Insect;
@@ -55,11 +56,12 @@ public class BeingsWithUI extends GUIState {
 	  //addBackgroundImage();
 	  display.repaint();
 	}
-	private OvalPortrayal2D getInsectPortrayal() {
+	private LabelledPortrayal2D getInsectPortrayal() {
 		OvalPortrayal2D r = new OvalPortrayal2D();
 		r.paint = Color.BLACK;
 		r.filled = true;
-		return r;
+
+		return new LabelledPortrayal2D(r, null);
 	}
 	private OvalPortrayal2D getFoodPortrayal() {
 		OvalPortrayal2D r = new OvalPortrayal2D();
