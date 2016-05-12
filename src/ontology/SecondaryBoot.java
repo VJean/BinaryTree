@@ -26,8 +26,8 @@ public class SecondaryBoot {
 			AgentController geoAgent = cc.createNewAgent("GeodataBase", "ontology.GeodataAgent", null);
 			geoAgent.start();
 			// create PropagateSparqlAgent agent
-//			AgentController propGeoSparqlAgent = cc.createNewAgent("PropagateSparql", "ontology.PropagateGeoSparqlAgent", null);
-//			propGeoSparqlAgent.start();
+			AgentController propGeoSparqlAgent = cc.createNewAgent("PropagateGeoSparql", "ontology.PropagateGeoSparqlAgent", null);
+			propGeoSparqlAgent.start();
 
 		} catch(Exception ex) {
 			ex.printStackTrace();
