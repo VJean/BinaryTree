@@ -16,16 +16,17 @@ import sim.display.GUIState;
 import sim.engine.SimState;
 import sim.portrayal.Inspector;
 import sim.portrayal.grid.ObjectGridPortrayal2D;
+import sim.portrayal.grid.SparseGridPortrayal2D;
 import sim.portrayal.simple.OvalPortrayal2D;
 import simulation.model.Beings;
-import simulation.model.TypeA;
-import simulation.model.TypeB;
+import simulation.model.Insect;
+import simulation.model.Food;
 
 public class BeingsWithUI extends GUIState {
 	public static int FRAME_SIZE = 600;
 	public Display2D display;
 	public JFrame displayFrame;
-	ObjectGridPortrayal2D yardPortrayal = new ObjectGridPortrayal2D();
+	SparseGridPortrayal2D yardPortrayal = new SparseGridPortrayal2D();
 	
 	public BeingsWithUI(SimState state) {
 		super(state);
@@ -45,24 +46,24 @@ public class BeingsWithUI extends GUIState {
 	public void setupPortrayals() {
 	  Beings beings = (Beings) state;	
 	  yardPortrayal.setField(beings.yard );
-	  yardPortrayal.setPortrayalForClass(TypeA.class, getTypeAPortrayal());
-	  yardPortrayal.setPortrayalForClass(TypeB.class, getTypeBPortrayal());
-	  //yardPortrayal.setPortrayalForClass(TypeB.class, new StrangeOvalPortrayal());
+	  yardPortrayal.setPortrayalForClass(Insect.class, getInsectPortrayal());
+	  yardPortrayal.setPortrayalForClass(Food.class, getFoodPortrayal());
+	  //yardPortrayal.setPortrayalForClass(Food.class, new StrangeOvalPortrayal());
 	  display.reset();
-	  display.setBackdrop(Color.orange);
+	  display.setBackdrop(Color.GREEN);
 		// redraw the display
 	  //addBackgroundImage();
 	  display.repaint();
 	}
-	private OvalPortrayal2D getTypeAPortrayal() {
+	private OvalPortrayal2D getInsectPortrayal() {
 		OvalPortrayal2D r = new OvalPortrayal2D();
-		r.paint = Color.RED;
+		r.paint = Color.BLACK;
 		r.filled = true;
 		return r;
 	}
-	private OvalPortrayal2D getTypeBPortrayal() {
+	private OvalPortrayal2D getFoodPortrayal() {
 		OvalPortrayal2D r = new OvalPortrayal2D();
-		r.paint = Color.GRAY;
+		r.paint = Color.YELLOW;
 		r.filled = true;
 		return r;
 	}
