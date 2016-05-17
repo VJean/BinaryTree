@@ -61,4 +61,17 @@ public class Beings extends SimState {
 		}
 		return location;
 	}
+	
+	// Remove a piece of food and create a new one
+	public void replaceFood(int x, int y) {
+		yard.removeObjectsAtLocation(x, y);
+		
+		Food f  =  new Food();
+		Int2D location = getFreeLocation();
+		yard.setObjectLocation(f, location);
+		f.x = location.x;
+		f.y = location.y;
+		Stoppable stoppable = schedule.scheduleRepeating(f);
+		f.stoppable = stoppable;
+	}
 }
