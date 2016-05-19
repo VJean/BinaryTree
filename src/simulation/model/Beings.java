@@ -4,6 +4,7 @@ import sim.engine.SimState;
 import sim.engine.Stoppable;
 import sim.field.grid.ObjectGrid2D;
 import sim.field.grid.SparseGrid2D;
+import sim.util.Bag;
 import sim.util.Int2D;
 
 public class Beings extends SimState {
@@ -66,7 +67,17 @@ public class Beings extends SimState {
 		}
 		return location;
 	}
-	
+
+	public void decrementFood(int x, int y) {
+		Bag bag = yard.getObjectsAtLocation(x, y);
+		Food f = (Food) bag.get(0);
+
+		f.removeItem();
+		if (f.isEmpty()) {
+			replaceFood(x,y);
+		}
+	}
+
 	// Remove a piece of food and create a new one
 	public void replaceFood(int x, int y) {
 		yard.removeObjectsAtLocation(x, y);
@@ -79,8 +90,6 @@ public class Beings extends SimState {
 		Stoppable stoppable = schedule.scheduleRepeating(f);
 		f.stoppable = stoppable;
 	}
-
-
 
 	public int getNumInsects(){
 		return numInsects;

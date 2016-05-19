@@ -63,11 +63,12 @@ public class BeingsWithUI extends GUIState {
 
 		return new LabelledPortrayal2D(r, null);
 	}
-	private OvalPortrayal2D getFoodPortrayal() {
+	private LabelledPortrayal2D getFoodPortrayal() {
 		OvalPortrayal2D r = new OvalPortrayal2D();
 		r.paint = Color.YELLOW;
 		r.filled = true;
-		return r;
+
+		return new LabelledPortrayal2D(r, null);
 	}
 	public void init(Controller c) {
 		  super.init(c);

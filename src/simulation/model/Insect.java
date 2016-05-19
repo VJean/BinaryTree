@@ -96,16 +96,16 @@ public class Insect extends AgentType {
 		if(deltaTarget==1){
 			if(energie > Constants.MAX_ENERGY - Constants.FOOD_ENERGY && charge < chargeMax){
 				charge++;
-				beings.replaceFood(target.x, target.y);
+				beings.decrementFood(target.x, target.y);
 			}
 			else if(energie <= Constants.MAX_ENERGY - Constants.FOOD_ENERGY){
 				energie += Constants.FOOD_ENERGY;
-				beings.replaceFood(target.x, target.y);
+				beings.decrementFood(target.x, target.y);
 			}
 			// if the insect cannot load food, it eats the food in any case
 			else{
 				energie = Constants.MAX_ENERGY;
-				beings.replaceFood(target.x, target.y);
+				beings.decrementFood(target.x, target.y);
 			}
 		}
 		return hasEaten;
