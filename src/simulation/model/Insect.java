@@ -174,6 +174,7 @@ public class Insect extends AgentType {
         else if(energie==0){
         	stoppable.stop();
         	beings.yard.removeObjectsAtLocation(this.x,this.y);
+			beings.setNumInsects(beings.getNumInsects() - 1);
         }
     }
 

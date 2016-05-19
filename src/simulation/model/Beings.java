@@ -12,10 +12,14 @@ public class Beings extends SimState {
 	public Beings(long seed) {
 		super(seed);
 	}
+
+	private int numInsects;
+
 	public void start() {
 		System.out.println("Simulation started");
 		super.start();
 		yard.clear();
+		setNumInsects(0);
 		addAgentsInsects();
 		addAgentsFood();
 	}
@@ -30,6 +34,7 @@ public class Beings extends SimState {
 			insect.y = location.y;
 			Stoppable stoppable = schedule.scheduleRepeating(insect);
 			insect.stoppable = stoppable;
+			numInsects++;
 		}
 	}
 	private void addAgentsFood() {
@@ -74,4 +79,14 @@ public class Beings extends SimState {
 		Stoppable stoppable = schedule.scheduleRepeating(f);
 		f.stoppable = stoppable;
 	}
+
+
+
+	public int getNumInsects(){
+		return numInsects;
+	}
+	public void setNumInsects(int numInsects){
+		this.numInsects = numInsects;
+	}
+
 }
