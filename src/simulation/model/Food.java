@@ -1,9 +1,12 @@
 package simulation.model;
 
+import sim.engine.Stoppable;
+
 import java.util.Random;
 
-public class Food extends AgentType {
+public class Food {
     private int items;
+    public int x, y;
 
     public Food() {
         items = new Random().nextInt(Constants.MAX_FOOD) + 1;

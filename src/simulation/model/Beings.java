@@ -46,8 +46,8 @@ public class Beings extends SimState {
 			yard.setObjectLocation(f, location);
 			f.x = location.x;
 			f.y = location.y;
-			Stoppable stoppable = schedule.scheduleRepeating(f);
-			f.stoppable = stoppable;
+//			Stoppable stoppable = schedule.scheduleRepeating(f);
+//			f.stoppable = stoppable;
 		}
 	}
 
@@ -87,8 +87,8 @@ public class Beings extends SimState {
 		yard.setObjectLocation(f, location);
 		f.x = location.x;
 		f.y = location.y;
-		Stoppable stoppable = schedule.scheduleRepeating(f);
-		f.stoppable = stoppable;
+//		Stoppable stoppable = schedule.scheduleRepeating(f);
+//		f.stoppable = stoppable;
 	}
 
 	public int getNumInsects(){
